@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Er komt een klant binnen en die wil 3/5 pizza eten. Geef het aan hem.",
+    "type": "circle",
+    "answer": "3/5"
+  },
+  {
+    "description": "Een chocoladereep bestaat uit stukjes. Je vriend wil graag 1/4 van de reep. Hoeveel geef je hem?",
+    "type": "rectangle",
+    "answer": "1/4"
+  },
+  {
+    "description": "Voor het bakken van een taart heb je 2/3 van een ronde boter nodig. Hoe ziet dat eruit?",
+    "type": "circle",
+    "answer": "2/3"
+  }
+]
