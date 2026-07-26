@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/theme/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -22,7 +23,7 @@ class PrimaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         backgroundColor: color ?? Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
       child: Text(
         text,

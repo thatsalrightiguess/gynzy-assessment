@@ -155,17 +155,21 @@ class _FractionShapeState extends State<FractionShape> with WidgetsBindingObserv
     final height = widget.size;
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(
-          key: _shapeKey,
-          width: width,
-          height: height,
+        Expanded(
+          child: Center(
+            child: SizedBox(
+              key: _shapeKey,
+              width: width,
+              height: height,
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         if (isRectangle)
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DivisionSelector(
                 label: 'Rows',
@@ -179,7 +183,7 @@ class _FractionShapeState extends State<FractionShape> with WidgetsBindingObserv
                   _onDivisionsChanged();
                 },
               ),
-              const SizedBox(width: 16),
+              const SizedBox(height: 16),
               DivisionSelector(
                 label: 'Columns',
                 value: _columns,

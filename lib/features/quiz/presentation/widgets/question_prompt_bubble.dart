@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class QuestionPromptBubble extends StatelessWidget {
   final String text;
@@ -23,12 +24,12 @@ class QuestionPromptBubble extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: const Icon(
-                    Icons.image,
-                    color: Colors.grey,
+                    Icons.person,
+                    color: AppColors.textSecondary,
                     size: 40,
                   ),
                 )
@@ -39,7 +40,7 @@ class QuestionPromptBubble extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.only(
                   topRight: const Radius.circular(20),
                   bottomRight: const Radius.circular(20),
@@ -48,7 +49,7 @@ class QuestionPromptBubble extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: AppColors.shadow,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -57,10 +58,10 @@ class QuestionPromptBubble extends StatelessWidget {
               child: Text(
                 text,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   height: 1.5,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: AppColors.text,
                 ),
               ),
             ),

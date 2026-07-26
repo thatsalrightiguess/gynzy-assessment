@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../widgets/answer_view_panel.dart';
 import '../widgets/question_view_panel.dart';
 import '../widgets/fraction_shape.dart';
@@ -249,20 +250,27 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
+  void _onResetPieces() {
+    setState(() {
+      for (final piece in pieces) {
+        piece.position = piece.initialPosition;
+      }
+      hasPiecesInAnswerView = false;
+      isCurrentAnswerCorrect = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.answerBackground,
       body: Stack(
         fit: StackFit.expand,
         children: [
           Row(
+            textDirection: TextDirection.rtl,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: QuestionViewPanel(
-                  shapeType: _currentShapeType,
-                  onPiecesGenerated: _handlePiecesGenerated,
-                ),
-              ),
               Expanded(
                 child: AnswerViewPanel(
                   key: answerPanelKey,
@@ -270,6 +278,15 @@ class _QuizScreenState extends State<QuizScreen> {
                   hasPieces: hasPiecesInAnswerView,
                   isSuccess: isSuccess,
                   onCheckAnswer: _onCheckAnswer,
+                  onResetPieces: _onResetPieces,
+                  currentQuestionNumber: _currentQuestionIndex + 1,
+                  totalQuestions: _allQuestions.length,
+                ),
+              ),
+              Expanded(
+                child: QuestionViewPanel(
+                  shapeType: _currentShapeType,
+                  onPiecesGenerated: _handlePiecesGenerated,
                 ),
               ),
             ],
@@ -322,8 +339,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   return LinearProgressIndicator(
                     value: value,
                     minHeight: 8,
-                    backgroundColor: Colors.grey.shade300,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                    backgroundColor: AppColors.border,
+                    valueColor: const AlwaysStoppedAnimation<Color>(AppColors.correct),
                   );
                 },
               ),

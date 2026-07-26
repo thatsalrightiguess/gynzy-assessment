@@ -8,6 +8,9 @@ class AnswerViewPanel extends StatelessWidget {
   final bool hasPieces;
   final bool isSuccess;
   final VoidCallback? onCheckAnswer;
+  final VoidCallback? onResetPieces;
+  final int currentQuestionNumber;
+  final int totalQuestions;
 
   const AnswerViewPanel({
     super.key,
@@ -15,12 +18,15 @@ class AnswerViewPanel extends StatelessWidget {
     this.hasPieces = false,
     this.isSuccess = false,
     this.onCheckAnswer,
+    this.onResetPieces,
+    this.currentQuestionNumber = 1,
+    this.totalQuestions = 1,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.answerBackground,
+      margin: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           if (questionTexts.isEmpty)
@@ -53,19 +59,43 @@ class AnswerViewPanel extends StatelessWidget {
             child: Center(
               child: Text(
                 'Sleep je stukjes hierheen!',
-                style: TextStyle(color: Colors.grey, fontSize: 18),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 18),
               ),
             ),
           ),
-          if (hasPieces)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: PrimaryButton(
-                text: isSuccess ? 'Volgende vraag' : 'Check Answer',
-                color: isSuccess ? Colors.green : null,
-                onPressed: onCheckAnswer ?? () {},
-              ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 32.0, right: 32.0, bottom: 32.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (hasPieces)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PrimaryButton(
+                        text: 'Leg alles terug',
+                        color: AppColors.reset,
+                        onPressed: onResetPieces ?? () {},
+                      ),
+                      PrimaryButton(
+                        text: isSuccess ? 'Volgende vraag' : 'Check Answer',
+                        color: isSuccess ? AppColors.correct : null,
+                        onPressed: onCheckAnswer ?? () {},
+                      ),
+                    ],
+                  ),
+                if (hasPieces) const SizedBox(height: 16),
+                Text(
+                  'Vraag $currentQuestionNumber / $totalQuestions',
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
+          ),
+          ),
         ],
       ),
     );
