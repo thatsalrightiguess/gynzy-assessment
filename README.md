@@ -1,3 +1,4 @@
 # gynzy
 
-A new Flutter project.
+RUNNEN MET COMMAND:
+flutter run -d chrome  
