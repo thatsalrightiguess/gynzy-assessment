@@ -1,17 +1,72 @@
 [
   {
-    "description": "Er komt een klant binnen en die wil 3/5 pizza eten. Geef het aan hem.",
+    "description": "Hallo! Ik ben Mathilda. Ik geef een feestje. Ik wil graag alvast 3/5 van de pizza klaarleggen. Kun jij laten zien welk deel dat is?",
     "type": "circle",
-    "answer": "3/5"
+    "answer": "3/5",
+    "pf": "pf_2",
+    "pizza": "pizza_1"
   },
   {
-    "description": "Een chocoladereep bestaat uit stukjes. Je vriend wil graag 1/4 van de reep. Hoeveel geef je hem?",
-    "type": "rectangle",
-    "answer": "1/4"
+    "description": "Hoi! Ik ben Finn. Mijn opa en oma komen op bezoek. Ik bewaar 1/2 van de pizza voor hen. Welk deel van de pizza is dat?",
+    "type": "circle",
+    "answer": "1/2",
+    "pf": "pf_1",
+    "pizza": "pizza_2"
   },
   {
-    "description": "Voor het bakken van een taart heb je 2/3 van een ronde boter nodig. Hoe ziet dat eruit?",
+    "description": "Hallo! Ik ben Sophie. Na het zwemmen heb ik veel trek. Ik wil graag 2/3 van de pizza eten. Kun jij dat aanwijzen?",
     "type": "circle",
-    "answer": "2/3"
+    "answer": "2/3",
+    "pf": "pf_2",
+    "pizza": "pizza_3"
+  },
+  {
+    "description": "Hoi! Ik ben Liam. Ik deel een pizza met mijn familie. Ik eet 1/4 van de pizza. Welk deel hoort daarbij?",
+    "type": "circle",
+    "answer": "1/4",
+    "pf": "pf_3",
+    "pizza": "pizza_4"
+  },
+  {
+    "description": "Hallo! Ik ben Emma. Na de voetbalwedstrijd eten we samen pizza. Ik neem 4/6 van de pizza. Kun jij dat laten zien?",
+    "type": "circle",
+    "answer": "4/6",
+    "pf": "pf_2",
+    "pizza": "pizza_5"
+  },
+  {
+    "description": "Hoi! Ik ben Noah. Tijdens de film eet ik 5/8 van de pizza op. Welk deel van de pizza is dat?",
+    "type": "circle",
+    "answer": "5/8",
+    "pf": "pf_3",
+    "pizza": "pizza_6"
+  },
+  {
+    "description": "Hallo! Ik ben Julia. Mijn vriendinnen blijven logeren. Ik eet 7/8 van de pizza. Kun jij aanwijzen welk deel dat is?",
+    "type": "circle",
+    "answer": "7/8",
+    "pf": "pf_2",
+    "pizza": "pizza_2"
+  },
+  {
+    "description": "Hoi! Ik ben Daan. Na school heb ik honger. Ik wil graag 3/4 van de pizza eten. Welk deel hoort daarbij?",
+    "type": "circle",
+    "answer": "3/4",
+    "pf": "pf_1",
+    "pizza": "pizza_3"
+  },
+  {
+    "description": "Hallo! Ik ben Nora. We vieren de verjaardag van mijn zus. Ik neem 5/6 van de pizza. Kun jij dat laten zien?",
+    "type": "circle",
+    "answer": "5/6",
+    "pf": "pf_2",
+    "pizza": "pizza_4"
+  },
+  {
+    "description": "Hoi! Ik ben Sem. Ik ga picknicken met mijn familie. Ik eet 2/5 van de pizza. Welk deel van de pizza is dat?",
+    "type": "circle",
+    "answer": "2/5",
+    "pf": "pf_3",
+    "pizza": "pizza_1"
   }
 ]

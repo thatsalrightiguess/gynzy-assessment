@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Background for the answer view
-  static const Color answerBackground = Color(0xFFF7DCAF);
-
-  // Background for the question view
-  static const Color questionBackground = Color(0xFFFFF5DC);
-
+  static const Color defaultBackground = Color(0xFFf7daae);
+  static const Color secondaryBackground = Color(0xFFfff5dc);
+  static const Color tertiaryBackground = Color(0xFFf6e8c1);
   // Main text color
   static const Color text = Color(0xFF715534);
-  
+
   // Secondary text color (with opacity)
   static const Color textSecondary = Color(0x99715534);
 
   // Correct answer color
-  static const Color correct = Colors.green;
+  static const Color correct = Color.fromARGB(255, 113, 200, 42);
 
   // Default interactive color
   static const Color defaultColor = Color(0xFFFFC540);

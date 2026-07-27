@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../widgets/answer_view_panel.dart';
-import '../widgets/question_view_panel.dart';
-import '../widgets/fraction_shape.dart';
+import '../widgets/answer_view/answer_view_panel.dart';
+import '../widgets/question_view/question_view_panel.dart';
+import '../widgets/fraction_component/fraction_shape.dart';
 import '../models/interactive_piece.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:async';
 import 'package:flutter/services.dart';
-import '../widgets/fraction_pieces/fraction_piece_circle.dart';
-import '../widgets/fraction_pieces/fraction_piece_rectangle.dart';
+import '../widgets/fraction_component/fraction_pieces/fraction_piece_circle.dart';
+import '../widgets/fraction_component/fraction_pieces/fraction_piece_rectangle.dart';
 import 'success_screen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -19,11 +19,14 @@ class QuizScreen extends StatefulWidget {
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen> with WidgetsBindingObserver {
   final List<InteractivePiece> pieces = [];
   final GlobalKey answerPanelKey = GlobalKey();
+  final GlobalKey plateKey = GlobalKey();
   List<String> currentQuestionTexts = [];
   String? currentAnswer;
+  String? currentPf;
+  String? currentPizza;
   bool hasPiecesInAnswerView = false;
   bool isCurrentAnswerCorrect = false;
   bool isSuccess = false;
@@ -37,7 +40,54 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadQuestion();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _successTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _updatePlatePieces();
+    });
+  }
+
+  void _updatePlatePieces() {
+    final RenderBox? plateBox = plateKey.currentContext?.findRenderObject() as RenderBox?;
+    if (plateBox == null) return;
+    
+    final Offset platePosition = plateBox.localToGlobal(Offset.zero);
+    final Size plateSize = plateBox.size;
+    final Rect plateRect = platePosition & plateSize;
+
+    bool needsUpdate = false;
+    for (final piece in pieces) {
+      if (piece.isOnPlate && piece.radius != null) {
+        final newPosition = plateRect.center - Offset(piece.radius!, piece.radius!);
+        if (piece.position != newPosition) {
+          piece.position = newPosition;
+          needsUpdate = true;
+        }
+      }
+    }
+    
+    if (needsUpdate) {
+      setState(() {});
+    }
+  }
+
+  void _scheduleUpdatePlatePieces() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _updatePlatePieces();
+    });
   }
 
   Future<void> _loadQuestion() async {
@@ -63,6 +113,8 @@ class _QuizScreenState extends State<QuizScreen> {
         currentQuestionTexts = [desc.toString()];
       }
       currentAnswer = currentQ['answer'];
+      currentPf = currentQ['pf'];
+      currentPizza = currentQ['pizza'];
       
       if (currentQ['type'] == 'rectangle') {
         _currentShapeType = ShapeType.rectangle;
@@ -113,7 +165,7 @@ class _QuizScreenState extends State<QuizScreen> {
         if (existingIndex >= 0) {
           final existingPiece = pieces[existingIndex];
           // If the piece hasn't been moved, update its position to the new initial position
-          if (existingPiece.position == existingPiece.initialPosition) {
+          if (!existingPiece.isOnPlate) {
             existingPiece.position = newPiece.initialPosition;
           }
           existingPiece.initialPosition = newPiece.initialPosition;
@@ -135,23 +187,30 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _handlePanEnd(InteractivePiece piece) {
-    final RenderBox? answerBox = answerPanelKey.currentContext?.findRenderObject() as RenderBox?;
-    if (answerBox != null) {
-      final Offset answerPosition = answerBox.localToGlobal(Offset.zero);
-      final Size answerSize = answerBox.size;
-      final Rect answerRect = answerPosition & answerSize;
+    final RenderBox? plateBox = plateKey.currentContext?.findRenderObject() as RenderBox?;
+    if (plateBox != null) {
+      final Offset platePosition = plateBox.localToGlobal(Offset.zero);
+      final Size plateSize = plateBox.size;
+      final Rect plateRect = platePosition & plateSize;
 
       // Approximate the center of the piece
       final double centerX = piece.position.dx + (piece.width ?? piece.radius! * 2) / 2;
       final double centerY = piece.position.dy + (piece.height ?? piece.radius! * 2) / 2;
 
-      if (!answerRect.contains(Offset(centerX, centerY))) {
+      if (!plateRect.contains(Offset(centerX, centerY))) {
         setState(() {
           piece.position = piece.initialPosition;
+          piece.isOnPlate = false;
+        });
+      } else {
+        // Snap to plate center
+        setState(() {
+          piece.position = plateRect.center - Offset(piece.radius!, piece.radius!);
+          piece.isOnPlate = true;
         });
       }
 
-      _calculateAndLogAnswer(answerRect);
+      _calculateAndLogAnswer(plateRect);
     }
   }
 
@@ -218,6 +277,7 @@ class _QuizScreenState extends State<QuizScreen> {
         }
         currentQuestionTexts.add('Ja perfect! Dankjewel!');
       });
+      _scheduleUpdatePlatePieces();
 
       _successTimer = Timer(const Duration(seconds: 5), () {
         if (!mounted) return;
@@ -234,6 +294,7 @@ class _QuizScreenState extends State<QuizScreen> {
         }
         currentQuestionTexts.add(message);
       });
+      _scheduleUpdatePlatePieces();
     }
   }
 
@@ -254,6 +315,7 @@ class _QuizScreenState extends State<QuizScreen> {
     setState(() {
       for (final piece in pieces) {
         piece.position = piece.initialPosition;
+        piece.isOnPlate = false;
       }
       hasPiecesInAnswerView = false;
       isCurrentAnswerCorrect = false;
@@ -263,8 +325,10 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.answerBackground,
-      body: Stack(
+      backgroundColor: AppColors.defaultBackground,
+      body: _allQuestions.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
         fit: StackFit.expand,
         children: [
           Row(
@@ -281,12 +345,16 @@ class _QuizScreenState extends State<QuizScreen> {
                   onResetPieces: _onResetPieces,
                   currentQuestionNumber: _currentQuestionIndex + 1,
                   totalQuestions: _allQuestions.length,
+                  pfImage: currentPf,
+                  plateKey: plateKey,
                 ),
               ),
               Expanded(
                 child: QuestionViewPanel(
+                  key: ValueKey(_currentQuestionIndex),
                   shapeType: _currentShapeType,
                   onPiecesGenerated: _handlePiecesGenerated,
+                  image: currentPizza,
                 ),
               ),
             ],
@@ -299,6 +367,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 index: piece.index!,
                 totalPieces: piece.totalPieces!,
                 color: piece.color,
+                image: piece.image,
                 onPanUpdate: (delta) {
                   setState(() {
                     piece.position += delta;

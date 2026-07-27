@@ -6,6 +6,7 @@ class FractionPieceCircle extends StatefulWidget {
   final int index;
   final int totalPieces;
   final Color color;
+  final String? image;
   final ValueChanged<Offset>? onPanUpdate;
   final VoidCallback? onPanEnd;
 
@@ -14,7 +15,8 @@ class FractionPieceCircle extends StatefulWidget {
     required this.radius,
     required this.index,
     required this.totalPieces,
-    required this.color,
+    this.color = Colors.blue,
+    this.image,
     this.onPanUpdate,
     this.onPanEnd,
   });
@@ -45,15 +47,25 @@ class _FractionPieceCircleState extends State<FractionPieceCircle> {
               widget.onPanEnd!();
             }
           },
-          child: CustomPaint(
-            size: Size(widget.radius * 2, widget.radius * 2),
-            painter: _FractionPieceCirclePainter(
-              radius: widget.radius,
-              index: widget.index,
-              totalPieces: widget.totalPieces,
-              color: widget.color,
-              isHovered: isHovered,
-            ),
+          child: Stack(
+            children: [
+              Image.asset(
+                'lib/assets/images/foods/pizza/${widget.image ?? 'pizza_1'}.png',
+                width: widget.radius * 2,
+                height: widget.radius * 2,
+                fit: BoxFit.cover,
+              ),
+              CustomPaint(
+                size: Size(widget.radius * 2, widget.radius * 2),
+                painter: _FractionPieceCirclePainter(
+                  radius: widget.radius,
+                  index: widget.index,
+                  totalPieces: widget.totalPieces,
+                  color: widget.color,
+                  isHovered: isHovered,
+                ),
+              ),
+            ],
           ),
         ),
       ),

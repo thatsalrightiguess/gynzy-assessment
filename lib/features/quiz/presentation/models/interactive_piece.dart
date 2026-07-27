@@ -8,6 +8,8 @@ class InteractivePiece {
   Offset position;
   Offset initialPosition;
   int fractionSize;
+  String? image;
+  bool isOnPlate;
 
   // Circle properties
   double? radius;
@@ -25,6 +27,8 @@ class InteractivePiece {
     required this.position,
     required this.initialPosition,
     required this.fractionSize,
+    this.image,
+    this.isOnPlate = false,
     this.radius,
     this.index,
     this.totalPieces,
